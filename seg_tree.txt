@@ -1,0 +1,35 @@
+    static int seg[],a[];
+    static void init(int n) {
+    	seg=new int[4*n];
+    }
+    static void union(int root) {
+    	int left=seg[2*root+1],right=seg[2*root+2];
+    	seg[root]=left+right;
+    }
+    static void build(int root,int l,int r) {
+    	if(l==r) {
+    		seg[root]=a[l];
+    		return;
+    	}
+    	int mid=(l+r)/2;
+    	build(2*root+1,l,mid);
+    	build(2*root+2,mid+1,r);
+    	union(root);
+    }
+    static void update(int root,int l,int r,int idx,int val) {
+    	if(l==r) {
+    		a[idx]=val;
+    		seg[root]=a[idx];
+    		return;
+    	}
+    	int mid=(l+r)/2;
+    	if(idx<=mid) update(2*root+1,l,mid,idx,val);
+    	else update(2*root+2,mid+1,r,idx,val);
+    	union(root);
+    }
+    static int query(int root,int l,int r,int x,int y) {
+    	if(y<l || r<x) return 0;
+    	if(x<=l && r<=y) return seg[root];
+    	int mid=(l+r)/2;
+    	return query(2*root+1,l,mid,x,y)+query(2*root+2,mid+1,r,x,y);
+    }

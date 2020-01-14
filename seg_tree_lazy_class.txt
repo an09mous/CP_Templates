@@ -1,0 +1,51 @@
+    static class SegmentTree{
+    	int seg[],lazy[],n;
+    	SegmentTree(int N){
+    		n=(Integer.highestOneBit(Math.max(N,1))<<1)<<1;
+    		seg=new int[n];
+    		lazy=new int[n];
+    	}
+    	void union(int root) {
+    		seg[root]=seg[2*root+1]+seg[2*root+2];
+    	}
+    	void propagate(int root,int l,int r) {
+    		if(lazy[root]==0) return;
+    		seg[root]=(r-l+1)-seg[root];
+    		if(l<r) {
+    			lazy[2*root+1]=(r-l+1)-seg[2*root+1];
+    			lazy[2*root+2]=(r-l+1)-seg[2*root+2];
+    		}
+    		lazy[root]=0;
+    	}
+    	void build(int root,int l,int r,int a[]) {
+    		if(l==r) {
+    			seg[root]=a[l];
+    			return;
+    		}
+    		int mid=l+(r-l)/2;
+    		build(2*root+1,l,mid,a);
+    		build(2*root+2,mid+1,r,a);
+    		union(root);
+    	}
+    	void update(int root,int l,int r,int x,int y) {
+    		if(lazy[root]!=0) propagate(root,l,r);
+    		if(y<l || r<x) return;
+    		if(x<=l && r<=y) {
+    			lazy[root]=1-lazy[root];
+    			return;
+    		}
+    		int mid=l+(r-l)/2;
+    		update(2*root+1,l,mid,x,y);
+    		update(2*root+2,mid+1,r,x,y);
+    		propagate(2*root+1,l,mid);
+    		propagate(2*root+2,mid+1,r);
+    		union(root);
+    	}
+    	int query(int root,int l,int r,int x,int y) {
+    		if(lazy[root]!=0) propagate(root,l,r);
+    		if(y<l || r<x) return 0;
+    		if(x<=l && r<=y) return seg[root];
+    		int mid=l+(r-l)/2;
+    		return query(2*root+1,l,mid,x,y)+query(2*root+2,mid+1,r,x,y);
+    	}
+    }

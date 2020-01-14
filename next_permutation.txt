@@ -1,0 +1,33 @@
+    //Generating next lexicographically greater permutation
+    static boolean next_perm(int a[],int n) {
+    	if(n<=1) return false;
+    	//We only change the position of a "digit" when everything to the right is in descending order
+    	//This digit is called pivot
+    	int pivot=n-2;
+    	while(pivot>=0) {
+    		if(a[pivot]<a[pivot+1]) break;
+    		pivot--;
+    	}
+    	//If there is no pivot, it means that the given permutation is already the last permutation
+    	if(pivot<0) return false;
+    	//Finding rightmost successor to the pivot i.e. the element which is greater than the pivot and farthest to it
+    	int next=n-1;
+    	for(int i=n-1;i>pivot;i--) {
+    		if(a[i]>a[pivot]) {
+    			next=i;
+    			break;
+    		}
+    	}
+    	//Swapping pivot with next
+    	int tmp=a[pivot];
+    	a[pivot]=a[next];
+    	a[next]=tmp;
+    	//Reversing the suffix
+    	int l=pivot+1,r=n-1;
+    	while(l<r) {
+    		tmp=a[l];
+    		a[l++]=a[r];
+    		a[r--]=tmp;
+    	}
+    	return true;
+    }

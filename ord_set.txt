@@ -1,0 +1,50 @@
+    static class ord_set{
+    	int seg[],n,length;
+    	ord_set(int n){
+    		this.n=n;
+    		length=4*n;
+    		seg=new int[4*n];
+    	}
+    	void union(int root) {
+    		seg[root]=seg[2*root+1]+seg[2*root+2];
+    	}
+    	void update(int root,int l,int r,int idx,int val) {
+    		if(l==r) {
+    			seg[root]=val;
+    			return;
+    		}
+    		int mid=l+(r-l)/2;
+    		if(idx<=mid) update(2*root+1,l,mid,idx,val);
+    		else update(2*root+2,mid+1,r,idx,val);
+    		union(root);
+    	}
+    	int query(int root,int l,int r,int x,int y) {
+    		if(y<l || r<x) return 0;
+    		if(x<=l && r<=y) return seg[root];
+    		int mid=l+(r-l)/2;
+    		return query(2*root+1,l,mid,x,y)+query(2*root+2,mid+1,r,x,y);
+    	}
+    	int find_kth(int root,int l,int r,int k) {
+    		if(k>seg[root]) return -1;
+    		if(l==r) return r;
+    		int mid=l+(r-l)/2;
+    		if(seg[2*root+1]>=k) return find_kth(2*root+1,l,mid,k);
+    		else return find_kth(2*root+2,mid+1,r,k-seg[2*root+1]);
+    	}
+    	void add(int x) {
+    		update(0,0,n-1,x,1);
+    	}
+    	void remove(int x) {
+    		update(0,0,n-1,x,0);
+    	}
+    	int findRank(int x) {
+    		return query(0,0,n-1,0,x);
+    	}
+    	int get(int k) {
+    		k+=1;
+    		return find_kth(0,0,n-1,k);
+    	}
+    	int size() {
+    		return seg[0];
+    	}
+    }

@@ -1,0 +1,41 @@
+    static long seg[],lazy[];
+    static void init(int n) {
+    	seg=new long[4*n];
+    	lazy=new long[4*n];
+    }
+    static void union(int root) {
+    	long left=seg[2*root+1];
+    	long right=seg[2*root+2];
+    	seg[root]=left+right;
+    }
+    static void propagate(int root,int l,int r) {
+    	seg[root]=(r-l+1)-seg[root];
+    	if(l<r) {
+    		lazy[2*root+1]=(1-lazy[2*root+1]);
+    		lazy[2*root+2]=(1-lazy[2*root+2]);
+    	}
+    	lazy[root]=0;
+    }
+    static void update(int root,int l,int r,int x,int y) {
+    	if(lazy[root]!=0) {
+    		propagate(root,l,r);
+    	}
+    	if(y<l || x>r) return;
+    	if(x<=l && r<=y) {
+    		lazy[root]=1-lazy[root];
+    		return;
+    	}
+    	int mid=(l+r)/2;
+    	update(2*root+1,l,mid,x,y);
+    	update(2*root+2,mid+1,r,x,y);
+    	if(lazy[2*root+1]!=0)propagate(2*root+1,l,mid);
+    	if(lazy[2*root+2]!=0)propagate(2*root+2,mid+1,r);
+    	union(root);
+    }
+    static long query(int root,int l,int r,int x,int y) {
+    	if(lazy[root]!=0) propagate(root,l,r);
+    	if(x<=l && r<=y) return seg[root];
+    	if(y<l || r<x) return 0;
+    	int mid=(l+r)/2;
+    	return (query(2*root+1,l,mid,x,y)+query(2*root+2,mid+1,r,x,y));
+    }

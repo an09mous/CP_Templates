@@ -1,0 +1,18 @@
+    static class node{
+    	int dest, weight;
+    	node(int d,int w){
+    		dest=d;
+    		weight=w;
+    	}
+    }
+    static int V;
+    static ArrayList<node> graph[];
+    static void init(int n){
+        V=n;
+        graph=new ArrayList[V];
+        for(int i=0;i<V;i++) graph[i]=new ArrayList<>();
+    }
+    static void addEdge(int src,int dest,int weight){
+        graph[src].add(new node(dest,weight));
+        graph[dest].add(new node(dest,weight));
+    }
