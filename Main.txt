@@ -74,15 +74,19 @@ public class Main {
         return true;
     }
     //Reverse an array
-    static <T> void reverse(T arr[],int l,int r){
-    	Collections.reverse(Arrays.asList(arr).subList(l, r));
+    static void reverse(int arr[],int l,int r){
+    	while(l<r) {
+    		int tmp=arr[l];
+    		arr[l++]=arr[r];
+    		arr[r++]=tmp;
+    	}
     }
     //Print array
-    static <T> void print1d(T arr[]) {
+    static void print1d(int arr[]) {
     	out.println(Arrays.toString(arr));
     }
-    static <T> void print2d(T arr[][]) {
-    	for(T a[]: arr) out.println(Arrays.toString(a));
+    static void print2d(int arr[][]) {
+    	for(int a[]: arr) out.println(Arrays.toString(a));
     }
     // Pair
     static class pair{
@@ -106,7 +110,7 @@ public class Main {
     public static void main (String[] args) throws java.lang.Exception {
     	int test=1;
         while(test-->0) {
-        }
+        } 	
         out.flush();
         out.close();
     }

@@ -1,0 +1,11 @@
+    static long phi(long x) {
+    	long res=x;
+    	for(int i=2;i*i<=x;i++) {
+    		if(x%i==0) {
+    			while(x%i==0) x/=i;
+    			res-=res/i;
+    		}
+    	}
+    	if(x>1) res-=res/x;
+    	return res;
+    }

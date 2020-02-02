@@ -1,0 +1,67 @@
+    //All the solutions of Linear Diophantine Equation
+    static long x,y;
+    static long ext_euc(long a,long b) {
+    	if(b==0) {
+    		x=1;
+    		y=0;
+    		return a;
+    	}
+    	long gcd=ext_euc(b,a%b);
+    	long tmp=x;
+    	x=y;
+    	y=tmp-(a/b)*y;
+    	return gcd;
+    }
+    static boolean find_any_sol(long a,long b,long c) {
+    	long g=ext_euc(Math.abs(a),Math.abs(b));
+    	if(c%g!=0) return false;
+    	x*=c/g;
+    	y*=c/g;
+    	if(a<0) x=-x;
+    	if(b<0) y=-y;
+    	return true;
+    }
+    static void shift(long a,long b,long k) {
+    	x+=k*b;
+    	y-=k*a;
+    }
+    static long find_all_sol(long a,long b,long c,long minX,long maxX,long minY,long maxY) {
+    	if(a==0 && b==0) {
+    		if(c==0) return(maxX-minX+1)*(maxY-minY+1);
+    		else return 0;
+    	}
+    	if(a==0) {
+    		if(c%b==0 && (-c/b)<=maxY && (-c/b)>=minY) return maxX-minX+1;
+    		else return 0;
+    	}
+    	if(b==0) {
+    		if(c%a==0 && (-c/a)<=maxX && (-c/a)>=minX) return maxY-minY+1;
+    	}
+    	long g=gcd(a,b);
+    	if(!find_any_sol(a,b,c)) return 0;
+    	a/=g;
+    	b/=g;
+    	int sign_a=a>0?1:-1,sign_b=b>0?1:-1;
+    	shift(a,b,(minX-x)/b);
+    	if(x<minX) shift(a,b,sign_b);
+    	if(x>maxX) return 0;
+    	long lx1=x;
+    	shift(a,b,(maxX-x)/b);
+    	if(x>maxX) shift(a,b,-sign_b);
+    	long rx1=x;
+    	shift(a,b,(y-minY)/a);
+    	if(y<minY) shift(a,b,-sign_a);
+    	if(y>maxY) return 0;
+    	long lx2=x;
+    	shift(a,b,(y-maxY)/a);
+    	if(y>maxY) shift(a,b,sign_a);
+    	long rx2=x;
+    	if(lx2>rx2) {
+    		long tmp=lx2;
+    		lx2=rx2;
+    		rx2=tmp;
+    	}
+    	long lx=Math.max(lx1, lx2),rx=Math.min(rx1, rx2);
+    	if(lx>rx) return 0;
+    	return (rx-lx)/Math.abs(b)+1;
+    }
