@@ -1,0 +1,26 @@
+static long[][] mult(long mat1[][],long mat2[][]) 
+	{ 		
+    	  long res[][]=new long[2][2];
+		  int i, j, k; 
+		  for (i = 0; i < 2; i++) 
+		  { 
+		      for (j = 0; j < 2; j++) 
+		      { 
+		          for (k = 0; k < 2; k++) {
+		        	  long val=((mat1[i][k]%MOD)*(mat2[k][j]%MOD))%MOD;
+		        	  res[i][j] = (res[i][j]%MOD+val%MOD)%MOD; 
+		          }
+		              
+		      } 
+		  } 
+		  return res;
+	}
+    static long[][] mat_expo(long mat[][],long n) {
+    	long res[][]= {{1L,0L},{0L,1L}};
+    	while(n>0) {
+    		if(n%2==1) res=mult(res,mat);
+    		mat=mult(mat,mat);
+    		n>>=1;
+    	}
+    	return res;
+    }
