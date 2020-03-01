@@ -14,5 +14,5 @@
     }
     static void addEdge(int src,int dest,int weight){
         graph[src].add(new node(dest,weight));
-        graph[dest].add(new node(dest,weight));
+        graph[dest].add(new node(src,weight));
     }
