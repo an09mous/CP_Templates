@@ -1,0 +1,37 @@
+    static class MultiSet{
+    	HashMap<Integer,Integer> map;
+    	TreeSet<Integer> set=new TreeSet<>();
+    	int size=0;
+    	MultiSet(){
+    		map=new HashMap<>();
+    		set=new TreeSet<>();
+    	}
+    	void add(int val) {
+    		map.merge(val, 1, Integer::sum);
+    		set.add(val);
+    		size++;
+    	}
+    	int first() {
+    		return set.first();
+    	}
+    	int last() {
+    		return set.last();
+    	}
+    	int pollFirst() {
+    		int key=set.first();
+    		map.put(key,map.get(key)-1);
+    		if(map.get(key)==0) set.pollFirst();
+    		size--;
+    		return key;
+    	}
+    	int pollLast() {
+    		int key=set.last();
+    		map.put(key,map.get(key)-1);
+    		if(map.get(key)==0) set.pollLast();
+    		size--;
+    		return key;
+    	}
+    	int size() {
+    		return size;
+    	}
+    }
