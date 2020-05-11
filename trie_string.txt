@@ -1,0 +1,35 @@
+    static class node{
+    	node children[];
+    	int end;
+    	node(){
+    		children=new node[26];
+    		end=0;
+    	}
+    }
+    static class Trie{
+    	node root;
+    	Trie(){
+    		root=new node();
+    	}
+    	void add(String s) {
+    		node cur=root;
+    		int len=s.length();
+    		for(int i=0;i<len;i++) {
+    			int idx=s.charAt(i)-'a';
+    			if(cur.children[idx]==null) cur.children[idx]=new node();
+    			cur=cur.children[idx];
+    		}
+    		cur.end++;
+    	}
+    	int query(String s) {
+    		node cur=root;
+    		int len=s.length();
+    		for(int i=0;i<len;i++) {
+    			int idx=s.charAt(i)-'a';
+    			if(cur.children[idx]==null) return 0;
+    			cur=cur.children[idx];
+    		}
+    		if(cur.end>0) return 1;
+    		return 0;
+    	}
+    }

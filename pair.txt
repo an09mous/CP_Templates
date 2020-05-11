@@ -1,0 +1,16 @@
+	    // Pair
+	    static class pair{
+	    	int x,y;
+	    	pair(int a,int b){
+	    		this.x=a;
+	    		this.y=b;
+	    	}
+	    	public boolean equals(Object obj) {
+	    		if(obj == null || obj.getClass()!= this.getClass()) return false;
+	            pair p = (pair) obj;
+	            return (this.x==p.x && this.y==p.y);
+	        }
+	    	public int hashCode() {
+	            return Objects.hash(x,y);
+	        }
+	    }

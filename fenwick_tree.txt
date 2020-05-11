@@ -1,0 +1,19 @@
+	    static int bit[],N;
+	    static void init(int n) {
+	    	N=n;
+	    	bit=new int[N+1];
+	    }
+	    static void add(int idx,int val) {
+	    	while(idx<=N) {
+	    		bit[idx]+=val;
+	    		idx+=idx&-idx;
+	    	}
+	    }
+	    static int sum(int idx) {
+	    	int sum=0;
+	    	while(idx>0) {
+	    		sum+=bit[idx];
+	    		idx-=idx&-idx;
+	    	}
+	    	return sum;
+	    }

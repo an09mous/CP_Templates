@@ -1,22 +1,15 @@
-    static long[][] mult(long a[][],long b[][]){
-    	int n=a.length;
-    	long res[][]=new long[n][n];
-    	for(int i=0;i<n;i++) {
-    		for(int j=0;j<n;j++) {
-    			for(int k=0;k<n;k++) {
-    				res[i][j]=(res[i][j]%MOD+((a[i][k]%MOD)*(b[k][j]%MOD))%MOD)%MOD;
-    			}
-    		}
-    	}
-    	return res;
-    }
-    static long[][] matrix_expo(long a[][],long n) {
-    	if(n==0) {
-    		int N=a.length;
-    		long res[][]=new long[N][N];
-    		for(int i=0;i<N;i++) for(int j=0;j<N;j++) if(i==j) res[i][j]=1;
-    		return res;
-    	}
-    	if(n%2==0) return matrix_expo(mult(a,a),n/2);
-    	return mult(a,matrix_expo(mult(a,a),n/2));
-    }
+	static long[][] mult(long X[][],long Y[][]){
+		int r1=X.length,c1=X[0].length,r2=Y.length,c2=Y[0].length;
+		long res[][]=new long[r1][c2];
+		for(int i=0;i<r1;i++) {
+			for(int j=0;j<c2;j++) {
+				for(int k=0;k<c1;k++) res[i][j]=(res[i][j]+X[i][k]*Y[k][j])%MOD;
+			}
+		}
+		return res;
+	}
+	static long[][] matrixExpo(long X[][],long n){
+		if(n==0) return I;
+		if(n%2==0) return matrixExpo(mult(X,X),n/2);
+		else return mult(X,matrixExpo(mult(X,X),n/2));
+	}

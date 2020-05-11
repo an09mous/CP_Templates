@@ -1,0 +1,68 @@
+    static class node{
+    	node left,right;
+    	int end;
+    	node(){
+    		left=null;
+    		right=null;
+    		end=0;
+    	}
+    }
+    static class Trie{
+    	node root=new node();
+    	Trie(){
+    		root=new node();
+    	}
+    	void add(int x) {
+    		node cur=root;
+    		for(int i=31;i>=0;i--) {
+    			int b=((x>>i)&1);
+    			if(b==0) {
+    				if(cur.left==null) cur.left=new node();
+    				cur=cur.left;
+    			}
+    			else {
+    				if(cur.right==null) cur.right=new node();
+    				cur=cur.right;
+    			}
+    		}
+    		cur.end++;
+    	}
+    	void remove(int x) {
+    		removeUtil(root,31,x);
+    	}
+    	node removeUtil(node root,int i,int x) {
+    		if(root==null) return null;
+    		if(i<0) {
+    			root.end--;
+    			if(root.end==0)root=null;
+    			return root;
+    		}
+    		int b=((x>>i)&1);
+    		if(b==0) root.left=removeUtil(root.left,i-1,x);
+    		else root.right=removeUtil(root.right,i-1,x);
+    		if(root.left==null && root.right==null && root.end==0) root=null;
+    		return root;
+    	}
+    	int query(int x) {
+    		node cur=root;
+    		int res=0;
+    		for(int i=31;i>=0;i--) {
+    			int b=((x>>i)&1);
+    			if(b==0) {
+    				if(cur.right!=null) {
+    					res|=(1<<i);
+    					cur=cur.right;
+    				}
+    				else cur=cur.left;
+    			}
+    			else {
+    				if(cur.left!=null) {
+    					res|=(1<<i);
+    					cur=cur.left;
+    				}
+    				else cur=cur.right;
+    			}
+    		}
+    		return res;
+    	}
+    }

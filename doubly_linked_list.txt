@@ -1,0 +1,42 @@
+class node{
+    node prev,next;
+    int data;
+    node(int data){
+        this.data=data;
+    }
+}
+class DoublyLinkedList{
+    node head,tail;
+    DoublyLinkedList(){
+        head=null;
+        tail=null;
+    }
+    void add(node n){
+        if(head==null){
+            head=n;
+            tail=n;
+            return;
+        }
+        tail.next=n;
+        n.prev=tail;
+        tail=n;
+    }
+    void remove(node n){
+        if(head==null) return;
+        else if(head==n) {
+            head=head.next;
+            if(head!=null) head.prev=null;
+        }
+        else if(tail==n) {
+            tail=tail.prev;
+            if(tail!=null) tail.next=null;
+        }
+        else{
+            if(n.prev==null || n.next==null) return;
+            n.prev.next=n.next;
+            n.next.prev=n.prev;
+            n.next=null;
+            n.prev=null;
+        }
+    }
+}
