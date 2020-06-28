@@ -1,0 +1,63 @@
+	//Dynamic Convex Hull Trick by Ahmad codeforces
+	static class Line {
+		long m, b; double left = Long.MIN_VALUE;
+		public Line(long mm, long x, long y) { m = mm; b = -m * x + y; }
+		public Line(long mm, long bb) { m = mm; b = bb; }
+		public long eval(long x) { return m * x + b; }
+		public double inter(Line x) {
+			return (double) (x.b - this.b) / (double) (this.m - x.m);
+		}
+	}
+	static class CHO {
+		TreeSet<Line> hull;
+		int type;  boolean query  = false;
+		Comparator<Line> comp = new Comparator<Line>() {
+			public int compare(Line a, Line b) {
+				if (!query) return type * Long.compare(a.m, b.m);
+				if (a.left == b.left) return Long.compare(a.m, b.m);
+				return Double.compare(a.left, b.left);
+			}
+		};
+		// -1 for min; +1 for max
+		public CHO(int typee) { type = typee;  hull = new TreeSet<>(comp); }
+ 
+		public void add(long m, long b) { add(new Line(m, b)); }
+ 
+		public void add(Line a) {
+			Line[] LR = { hull.lower(a), hull.ceiling(a) };
+			for (int i = 0; i < 2; i++)
+				if (LR[i] != null && LR[i].m == a.m) {
+					if (type == 1 && LR[i].b >= a.b) return;
+					if (type == -1 && LR[i].b <= a.b) return;
+					remove(LR[i]);
+				}
+			hull.add(a);
+			Line L = hull.lower(a), R = hull.higher(a);
+			if (L != null && R != null && a.inter(R) <= R.left) {
+				hull.remove(a);
+				return;
+			}
+			Line LL = (L != null) ? hull.lower(L) : null;
+			Line RR = (R != null) ? hull.higher(R) : null;
+			if (L != null) a.left = a.inter(L);
+			if (R != null) R.left = a.inter(R);
+			while (LL != null && L.left >= a.inter(LL)) {
+				remove(L);
+				a.left = a.inter(L = LL);
+				LL = hull.lower(L);
+			}
+			while (RR != null && R.inter(RR) <= a.inter(RR)) {
+				remove(R);
+				RR.left = a.inter(R = RR);
+				RR = hull.higher(R);
+			}
+		}
+		public long query(long x) {
+			Line temp = new Line(0, 0, 0);
+			temp.left = x;  query = true;
+			long ans = (long) hull.floor(temp).eval(x);
+			query = false;  return ans;
+		}
+		private void remove(Line x) { hull.remove(x); }
+		public int size() { return hull.size(); }
+	}

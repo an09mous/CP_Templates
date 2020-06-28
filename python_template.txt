@@ -1,0 +1,5 @@
+import sys
+def prints(s,end='\n'):
+    sys.stdout.write(str(s)+end)
+def inputs():
+    return sys.stdin.readline()
