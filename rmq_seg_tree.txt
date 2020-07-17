@@ -1,0 +1,30 @@
+    static long seg[],a[];
+    static void init(int n) {
+    	seg=new long[4*n];
+    }
+    static void build(int root,int l,int r) {
+    	if(l==r) {
+    		seg[root]=a[l];
+    		return;
+    	}
+    	int mid=l+(r-l)/2;
+    	build(2*root+1,l,mid);
+    	build(2*root+2,mid+1,r);
+    	seg[root]=Math.min(seg[2*root+1], seg[2*root+2]);
+    }
+    static void update(int root,int l,int r,int idx,int val) {
+    	if(l==r) {
+    		seg[root]=a[l]=val;
+    		return;
+    	}
+    	int mid=l+(r-l)/2;
+    	if(idx<=mid) update(2*root+1,l,mid,idx,val);
+    	else update(2*root+2,mid+1,r,idx,val);
+    	seg[root]=Math.min(seg[2*root+1], seg[2*root+2]);
+    }
+    static long query(int root,int l,int r,int x,int y) {
+    	if(r<x || y<l) return Long.MAX_VALUE;
+    	if(x<=l && r<=y) return seg[root];
+    	int mid=l+(r-l)/2;
+    	return Math.min(query(2*root+1,l,mid,x,y), query(2*root+2,mid+1,r,x,y));
+    }

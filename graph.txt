@@ -1,12 +1,11 @@
-	    static int V,visited[];
-	    static ArrayList<Integer> graph[];
-	    static void init(int n){
-	        V=n;
-	        visited=new int[n];
-	        graph=new ArrayList[V];
-	        for(int i=0;i<V;i++) graph[i]=new ArrayList<>();
-	    }
-	    static void addEdge(int src,int dest){
-	        graph[src].add(dest);
-	        graph[dest].add(src);
-	    }
+    static int V;
+    static ArrayList<Integer> graph[];
+    static void init(int n){
+        V=n;
+        graph=new ArrayList[V];
+        for(int i=0;i<V;i++) graph[i]=new ArrayList<>();
+    }
+    static void addEdge(int src,int dest){
+        graph[src].add(dest);
+        graph[dest].add(src);
+    }
