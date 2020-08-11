@@ -1,0 +1,50 @@
+    //Edmonds-Karp O(VE^2)
+    static int V,capacity[][],parent[],inf=(int)1e8;
+    static ArrayList<Integer> graph[];
+    static void init(int n) {
+    	V=n;
+    	capacity=new int[n][n];
+    	parent=new int[n];
+    	graph=new ArrayList[n];
+    	for(int i=0;i<n;i++) graph[i]=new ArrayList<>();
+    }
+    static void addEdge(int s,int t,int c) {
+    	graph[s].add(t);
+    	graph[t].add(s);
+    	capacity[s][t]=c;
+    }
+    static int bfs(int s,int t){
+    	Arrays.fill(parent, -1);
+    	Queue<int[]> q=new LinkedList<>();
+    	q.add(new int[] {s,inf});
+    	parent[s]=-2;
+    	while(!q.isEmpty()) {
+    		int tmp[]=q.poll();
+    		s=tmp[0];
+    		int flow=tmp[1];
+    		if(s==t) return flow;
+    		for(Integer x: graph[s]) {
+    			if(parent[x]!=-1 || capacity[s][x]==0) continue;
+    			parent[x]=s;
+    			flow=Math.min(flow, capacity[s][x]);
+    			q.add(new int[] {x,flow});
+    		}
+    	}
+    	return 0;
+    }
+    static int maxFlow(int s,int t) {
+    	int flow=0;
+    	while(true) {
+    		int bottleneck=bfs(s,t);
+    		if(bottleneck==0) break;
+    		flow+=bottleneck;
+    		int cur=t;
+    		while(cur!=s) {
+    			int prev=parent[cur];
+    			capacity[prev][cur]-=bottleneck;
+    			capacity[cur][prev]+=bottleneck;
+    			cur=prev;
+    		}
+    	}
+    	return flow;
+    }
