@@ -1,0 +1,80 @@
+    //Dinic's algo O(EV^2)
+    // For bipartite matching O(sqrt(V)E)
+    static class edge{
+    	int src,dest,cap,flow;
+    	edge(int s,int d,int c){
+    		src=s;
+    		dest=d;
+    		cap=c;
+    		flow=0;
+    	}
+    }
+    static class dinic{
+    	int inf=(int)1e9+1;
+    	ArrayList<edge> edges;
+    	ArrayList<Integer> graph[];
+    	int n,m=0,s,t;
+    	int level[],next[];
+    	Queue<Integer> q;
+    	dinic(int n,int s,int t){
+    		this.n=n;
+    		this.s=s;
+    		this.t=t;
+    		graph=new ArrayList[n];
+    		edges=new ArrayList<>();
+    		for(int i=0;i<n;i++) graph[i]=new ArrayList<>();
+    		level=new int[n];
+    		next=new int[n];
+    	}
+    	void addEdge(int s,int d,int c) {
+    		edges.add(new edge(s,d,c));
+    		edges.add(new edge(d,s,0));
+    		graph[s].add(m);
+    		graph[d].add(m+1);
+    		m+=2;
+    	}
+    	boolean bfs() {
+    		Arrays.fill(level, -1);
+			level[s]=0;
+			q=new LinkedList<>();
+			q.add(s);
+    		while(!q.isEmpty()) {
+    			int v=q.poll();
+    			for(Integer id: graph[v]) {
+    				if(edges.get(id).cap-edges.get(id).flow<1) continue;
+    				if(level[edges.get(id).dest]!=-1) continue;
+    				level[edges.get(id).dest]=level[v]+1;
+    				q.add(edges.get(id).dest);
+    			}
+    		}
+    		return level[t]!=-1;
+    	}
+    	int dfs(int s,int pushed) {
+    		if(pushed==0) return 0;
+    		if(s==t) return pushed;
+    		for(;next[s]<graph[s].size();next[s]++) {
+    			int id=graph[s].get(next[s]);
+    			int x=edges.get(id).dest;
+    			if(level[s]+1!=level[x] || edges.get(id).cap-edges.get(id).flow<1) continue;
+    			int val=dfs(x,Math.min(pushed, edges.get(id).cap-edges.get(id).flow));
+    			if(val==0) continue;
+    			edges.get(id).flow+=val;
+    			edges.get(id^1).flow-=val;
+    			return val;
+    		}
+    		return 0;
+    		
+    	}
+    	int maxFlow() {
+    		int flow=0;
+    		while(bfs()) {
+    			Arrays.fill(next, 0);
+    			while(true) {
+    				int bottleneck=dfs(s,inf);
+    				if(bottleneck==0) break;
+    				flow+=bottleneck;
+    			}
+    		}
+    		return flow;
+    	}
+    }
