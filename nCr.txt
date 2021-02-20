@@ -1,0 +1,15 @@
+    static long exp(long a,long x) {
+    	if(x==0) return 1;
+    	if(x%2==0) return exp((x*x)%MOD,x/2)%MOD;
+    	return ((x%MOD)*((exp((x*x)%MOD,x/2))%MOD))%MOD;
+    }
+    static long inv(long x) {
+    	return exp(x,MOD-2);
+    }
+    static int N=(int)2e6;
+    static long fact[]=new long[N];
+    static long nCr(int n,int r) {
+    	long num=fact[n];
+    	long denom=(fact[r]*fact[n-r])%MOD;
+    	return (num*inv(denom))%MOD;
+    }
